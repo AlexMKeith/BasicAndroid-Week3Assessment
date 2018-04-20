@@ -54,22 +54,33 @@ public class AccountFragment extends Fragment {
     }
 
 
-
+    @OnClick(R.id.button_finish)
     private void showAlertDialog(String message) {
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
-        } else {
-            builder = new AlertDialog.Builder(getContext());
+        if (nameInput.getText().toString().isEmpty() || classInput.getText().toString().isEmpty()) {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
+
+            } else {
+                builder = new AlertDialog.Builder(getContext());
+            } if(!classInput.ignoreCase("warrior") || !classInput.ignoreCase("mage") || !classInput.ignoreCase("archer"))
+            builder.setTitle("Error, must be warrior, mage, or archer.")
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
-        builder.setTitle("Error")
-                .setMessage(message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+    }
+
+    public void setCallback (ActivityCallback activityCallback){
+        this.activityCallback = activityCallback;
+    }
+
+    public interface ActivityCallback {
+        void createAccount(String name, String accountClass);
     }
 }
